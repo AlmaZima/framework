@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Queue\Jobs\IronJob;
 use Illuminate\Encryption\Encrypter;
+use Illuminate\Support\Facades\Config;
 
 class IronQueue extends Queue implements QueueInterface {
 
