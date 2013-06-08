@@ -168,7 +168,7 @@ class IronQueue extends Queue implements QueueInterface {
         }
         else
         {
-		    parent::createPayload($job, $data);
+		    return parent::createPayload($job, $data);
         }
 	}
 
