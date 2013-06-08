@@ -99,12 +99,18 @@ class IronQueue extends Queue implements QueueInterface {
 		// If we were able to pop a message off of the queue, we will need to decrypt
 		// the message body, as all Iron.io messages are encrypted, since the push
 		// queues will be a security hazard to unsuspecting developers using it.
-		if ( ! is_null($job))
+		if ( ! is_null($job) && Config::get('queue.connections.iron.encrypt') !== false)
 		{
 			$job->body = $this->crypt->decrypt($job->body);
 
 			return new IronJob($this->container, $this->iron, $job, $queue);
 		}
+        elseif ( ! is_null($job))
+        {
+
+			return new IronJob($this->container, $this->iron, $job, $queue);
+
+        }
 	}
 
 	/**
@@ -155,7 +161,14 @@ class IronQueue extends Queue implements QueueInterface {
 	 */
 	protected function createPayload($job, $data = '')
 	{
-		return $this->crypt->encrypt(parent::createPayload($job, $data));
+        if ( Config::get('queue.connections.iron.encrypt') !== false)
+        {
+		    return $this->crypt->encrypt(parent::createPayload($job, $data));
+        }
+        else
+        {
+		    parent::createPayload($job, $data);
+        }
 	}
 
 	/**
