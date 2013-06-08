@@ -4,6 +4,7 @@ use Countable;
 use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
+use Illuminate\Support\Collection;
 
 class Paginator implements ArrayAccess, Countable, IteratorAggregate {
 
@@ -143,7 +144,7 @@ class Paginator implements ArrayAccess, Countable, IteratorAggregate {
 			return $lastPage > 0 ? $lastPage : 1;
 		}
 
-		return $this->isValidPageNumber($page) ? $page : 1;
+		return $this->isValidPageNumber($page) ? (int) $page : 1;
 	}
 
 	/**
@@ -282,6 +283,16 @@ class Paginator implements ArrayAccess, Countable, IteratorAggregate {
 	public function getPerPage()
 	{
 		return $this->perPage;
+	}
+
+	/**
+	 * Get a collection instance containing the items.
+	 *
+	 * @return \Illuminate\Support\Collection
+	 */
+	public function getCollection()
+	{
+		return new Collection($this->items);
 	}
 
 	/**
